@@ -8,51 +8,75 @@
 
   <!-- jspreadsheet -->
   <script src="./jss/index.js"></script>
- 
+
   <!-- jsuites -->
   <script src="./jss/jsuites.js"></script>
 
   <!-- custom styling -->
   <link rel="stylesheet" href="./jss/jspreadsheet.css" type="text/css" />
   <!-- custom styling -->
-  <link rel="stylesheet" href="./jss/jspreadsheet.datatables.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="./jss/jspreadsheet.datatables.css" type="text/css" /> -->
   <!-- custom styling -->
-  <link rel="stylesheet" href="./jss/jspreadsheet.theme.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="./jss/jspreadsheet.theme.css" type="text/css" /> -->
   <!-- custom styling -->
   <link rel="stylesheet" href="./jss/jsuites.css" type="text/css" />
-
-
 
 </head>
 
 <body>
 
 
- 
-  <div id="spreadsheet"></div>
+  <div id="tabs">
+    <div>
+      <div>Tab 1</div>
+      <div>Tab 2</div>
+    </div>
+    <div>
+      <div>
+        <form id='track-chg'>
+          <div id="spreadsheet"></div>
+          <input type='text' id = 'test-input' name='name' value='ss_data' hidden>
+        </form>
+      </div>
+      <div>
+        Is this working
+      </div>
+    </div>
+  </div>
 </body>
 
 
 <script>
+  var changed = function(instance, cell, x, y, value) {
+      document.getElementById('test-input').value =  instance.jexcel.getData();
+  }
   var data = [
-      ['Jazz', 'Honda', '2019-02-12', '', true, '$ 2.000,00', '#777700'],
-      ['Civic', 'Honda', '2018-07-11', '', true, '$ 4.000,01', '#007777'],
+    ['Jazz', 'Honda', '2019-02-12',  true, '123.444444', ],
+    ['Civic', 'Honda', '2018-07-11', true, '123.444444', ],
   ];
 
   jspreadsheet(document.getElementById('spreadsheet'), {
-      data: data,
-      columns: [
-          { type: 'text', title: 'Car', width: 120 },
-          { type: 'dropdown', title: 'Make', width: 200, source: ["Alfa Romeo", "Audi", "Bmw"] },
-          { type: 'calendar', title: 'Available', width: 200 },
-          { type: 'image', title: 'Photo', width: 120 },
-          { type: 'checkbox', title: 'Stock', width: 80 },
-          { type: 'numeric', title: 'Price', width: 100, mask: '$ #.##,00', decimal: ',' },
-          { type: 'color', width: 100, render: 'square', }
-      ]
+    data: data,
+    columns: [
+      { type: 'text', title: 'Car', width: 120 },
+      { type: 'dropdown', title: 'Make', width: 200, source: ["Alfa Romeo", "Audi", "Bmw"] },
+      { type: 'calendar', title: 'Available', width: 200, options: { format: 'YYYY-MM-DD' } },
+      { type: 'checkbox', title: 'Stock', width: 80 },
+      { type: 'numeric', title: 'Price', width: 100, mask: '#,##0.#', decimal: '.' },
+      { type: 'numeric', title: 'Amount', width: 100, mask: '#,##0.#', decimal: '.' }
+    ],
+    onchange: changed
   });
 </script>
 
-
+<script>
+  var tabs = jSuites.tabs(document.getElementById('tabs'), {
+    animation: true,
+    // allowCreate: true,
+    // allowChangePosition: true,
+    padding: '10px',
+  });
+  var myTracker = jSuites.tracker(document.getElementById('track-chg'));
+</script>
 
 </html>
